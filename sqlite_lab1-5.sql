@@ -37,4 +37,29 @@ JOIN Album A on A.AlbumId = T.AlbumId
 JOIN Artist A2 on A.ArtistId = A2.ArtistId
 WHERE A2.Name LIKE "A%";
 
+SELECT count(*) total_tracks, count(DISTINCT art.Name) artist_count
+FROM Artist art
+JOIN Album al on art.ArtistId = al.ArtistId
+JOIN Track T on al.AlbumId = T.AlbumId
+WHERE art.Name LIKE "A%"
+
 --7 return first name, last name, birth date, birth decade of employees
+SELECT FirstName||" "||LastName full_name, BirthDate,
+       CASE WHEN BirthDate BETWEEN '1940-01-01' and '1950-01-01' THEN '40s'
+            WHEN BirthDate BETWEEN '1950-01-01' and '1960-01-01' THEN '50s'
+            WHEN BirthDate BETWEEN '1960-01-01' and '1970-01-01' THEN '60s'
+        ELSE '70s'
+        END Decade
+FROM Employee
+
+--SUB QUERIES
+SELECT *
+FROM Customer
+WHERE Country IN
+    (
+        SELECT DISTINCT Country
+        FROM Customer
+        WHERE PostalCode = '70174'
+        or Fax IS NOT NULL
+    );
+
