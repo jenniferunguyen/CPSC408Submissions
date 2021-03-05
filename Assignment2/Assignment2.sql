@@ -78,11 +78,24 @@ JOIN Employee E on E.EmployeeId = C.SupportRepId
 WHERE E.FirstName = 'Jane' AND E.LastName = 'Peacock';
 
 --BONUS std dev of sum of totals in Invoice per billing country
-SELECT sum_total, (AVG(sum_total) - sum_total) avg_sum_total
-FROM(
-    SELECT BillingCountry, SUM(Total) sum_total
-    FROM Invoice
-    GROUP BY BillingCountry
-    )
+SELECT sqrt(SUM(difference*difference)/count_country) mystddev
+FROM
+     (
+         --get difference between country data and mean
+         SELECT (SUM(Total) - avg_total) difference, count_country
+         FROM Invoice,
+              (
+                  --get average of sum of totals, get number of countries
+                  SELECT SUM(Total)/count(DISTINCT Invoice.BillingCountry) avg_total, count(DISTINCT Invoice.BillingCountry) count_country
+                  FROM Invoice
+                  )
+         GROUP BY BillingCountry
+         )
 ;
+
+--check for extra credit
+SELECT stdev(sum_total)
+FROM (SELECT SUM(Total) sum_total
+    FROM Invoice
+    GROUP BY BillingCountry);
 
