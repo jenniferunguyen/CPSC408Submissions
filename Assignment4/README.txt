@@ -11,4 +11,4 @@ References:
 
 
 Known errors:
-
+can't get birthdates before 1970 (known Windows 10 error: https://bugs.python.org/issue36439)
