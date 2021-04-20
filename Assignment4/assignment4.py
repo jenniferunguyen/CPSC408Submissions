@@ -29,7 +29,7 @@ def genClients(num: int):
                      "Occupation","Preference","Phase",
                      "Approved?","Update"])
     for x in range(0, num):
-        writer.writerow(fake.first_name(),
+        writer.writerow([fake.first_name(),
                         fake.last_name(),
                         fake.date_between_dates(date_start=date(1970, 1, 1), date_end=date(2004, 1, 1)),
                         fake.numerify('###-###-####'),
@@ -42,7 +42,7 @@ def genClients(num: int):
                         random.choice(preferences),
                         random.choice(phases),
                         fake.boolean(),
-                        fake.date_between_dates(date_start=date(2000, 1, 1), date_end=date(2004, 1, 1)))
+                        fake.date_between_dates(date_start=date(2000, 1, 1), date_end=date(2004, 1, 1))])
 
 # generate pets data
 def genPets(num: int):
@@ -52,12 +52,12 @@ def genPets(num: int):
                      "Type","HealthConcerns",
                      "Phase"])
     for x in range(0, num):
-        writer.writerow(fake.first_name(),
+        writer.writerow([fake.first_name(),
                         fake.date_between_dates(date_start=date(1991, 1, 1), date_end=date(2021, 1, 1)),
                         random.choice(genders),
                         random.choice(preferences),
                         fake.boolean(),
-                        random.choice(phases))
+                        random.choice(phases)])
 
 # generate shelters data
 def genShelters(num: int):
@@ -66,12 +66,12 @@ def genShelters(num: int):
     writer.writerow(["Phone","Email",
                      "Address","City","State","Zip"])
     for x in range(0, num):
-        writer.writerow(fake.numerify('###-###-####'),
+        writer.writerow([fake.numerify('###-###-####'),
                         fake.last_name().lower()+"@pawsibleshelters.com",
                         fake.street_address(),
                         fake.city(),
                         random.choice(states),
-                        fake.pyint(min_value=90000, max_value=99500))
+                        fake.pyint(min_value=90000, max_value=99500)])
 
 # generate employees data
 def genEmployees(num: int):
@@ -80,7 +80,7 @@ def genEmployees(num: int):
     writer.writerow(["FirstName","LastName","DOB","Phone","Email",
                      "Address","City","State","Zip"])
     for x in range(0, num):
-        writer.writerow(fake.first_name(),
+        writer.writerow([fake.first_name(),
                         fake.last_name(),
                         fake.date_between_dates(date_start=date(1970, 1, 1), date_end=date(2004, 1, 1)),
                         fake.numerify('###-###-####'),
@@ -88,7 +88,7 @@ def genEmployees(num: int):
                         fake.street_address(),
                         fake.city(),
                         random.choice(states),
-                        fake.pyint(min_value=90000, max_value=99500))
+                        fake.pyint(min_value=90000, max_value=99500)])
 
 # IMPORT DATA
 def importDatạ():
@@ -172,16 +172,18 @@ print("1. clients")
 print("2. pets")
 print("3. shelters")
 print("4. employees")
+print("5. I want to import data")
 user_file = input("Which file do you want to create? ")
-while user_file not in ["1","2","3","4"]:
-    user_file = input("Which file do you want to create? ")
+while user_file not in ["1","2","3","4","5"]:
+    user_file = input("Please select a valid option ")
 user_file = int(user_file)
 
 # how many records to create
-user_count = input("How many records do you want to generate? ")
-while not user_count.isdigit():
+if user_file != 5:
     user_count = input("How many records do you want to generate? ")
-user_count = int(user_count)
+    while not user_count.isdigit():
+        user_count = input("How many records do you want to generate? ")
+    user_count = int(user_count)
 
 if user_file == 1:
     genClients(user_count)
@@ -197,24 +199,24 @@ elif user_file == 3:
     genShelters(user_count)
 elif user_file == 4:
     genEmployees(user_count)
-
-print("Have you generated data for all four tables yet?")
-user_input = input("Y/N").upper()
-if user_input == "Y":
-    print("Are you sure that you have a clients.csv, pets.csv, shelters.csv, and employees.csv?")
+elif user_file == 5:
+    print("Have you generated data for all four tables yet?")
     user_input = input("Y/N").upper()
     if user_input == "Y":
-        print("Would you like to import the data into the database tables?")
+        print("Are you sure that you have a clients.csv, pets.csv, shelters.csv, and employees.csv?")
         user_input = input("Y/N").upper()
         if user_input == "Y":
-            print("Importing data...")
-            importDatạ()
+            print("Would you like to import the data into the database tables?")
+            user_input = input("Y/N").upper()
+            if user_input == "Y":
+                print("Importing data...")
+                importDatạ()
+            else:
+                print("You have chosen to not import data at this time.")
+                exit()
         else:
-            print("You have chosen to not import data at this time.")
+            print("Please generate data for all four tables.")
             exit()
     else:
         print("Please generate data for all four tables.")
         exit()
-else:
-    print("Please generate data for all four tables.")
-    exit()
